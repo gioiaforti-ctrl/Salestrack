@@ -742,7 +742,7 @@ Restituisci SOLO un oggetto JSON valido con questi campi:
 Se non riesci a estrarre i dati, restituisci: {"error": "non leggibile"}`;
 
   try {
-    const response = await fetch('/.netlify/functions/analyze', {
+    const response = await fetch('/api/analyze', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -829,7 +829,7 @@ Genera il testo in ITALIANO e in INGLESE. Rispondi SOLO con un oggetto JSON vali
 }`;
 
   try {
-    const response = await fetch('/.netlify/functions/analyze', {
+    const response = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt })
