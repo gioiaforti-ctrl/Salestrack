@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0F1A14">
+  <title>Venduto — Second Hand Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/iconfont/tabler-icons.min.css">
+  <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F7F6F2;
+  --card: #FFFFFF;
+  --text: #1A1A18;
+  --muted: #888780;
+  --border: rgba(0,0,0,0.08);
+  --accent: #1D9E75;
+  --accent-light: #E1F5EE;
+  --accent-dark: #0F6E56;
+  --danger: #A32D2D;
+  --amber: #BA7517;
+  --blue: #185FA5;
+  --vinted: #09B1BA;
+  --depop: #FF4922;
+  --wallapop: #14C900;
+  --subito: #FF8C00;
+  --etsy: #F56400;
+  --ebay: #0064D2;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* SCREENS */
+.screen { display: none; padding-bottom: 1rem; min-height: 100vh; }
+.screen.active { display: block; }
+
+/* TOPBAR */
+.topbar { padding: 1.25rem 1.25rem 0.5rem; display: flex; justify-content: space-between; align-items: flex-start; }
+.greeting { font-size: 13px; color: var(--muted); }
+.page-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-top: 2px; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; color: #fff; flex-shrink: 0; }
+
+/* HERO */
+.hero { margin: 1rem 1.25rem; background: var(--text); border-radius: 20px; padding: 1.5rem; color: #fff; }
+.hero-label { font-size: 12px; opacity: 0.55; letter-spacing: 0.05em; text-transform: uppercase; }
+.hero-amount { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; margin: 6px 0 2px; }
+.hero-sub { font-size: 13px; opacity: 0.5; }
+.hero-pills { display: flex; gap: 8px; margin-top: 1rem; flex-wrap: wrap; }
+.hero-pill { background: rgba(255,255,255,0.12); border-radius: 20px; padding: 4px 12px; font-size: 12px; display: flex; align-items: center; gap: 5px; }
+.pill-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* SECTION TITLE */
+.section-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; padding: 1.25rem 1.25rem 0.5rem; }
+
+/* PLATFORM CARDS */
+.platforms { display: flex; flex-direction: column; gap: 8px; padding: 0 1.25rem; }
+.platform-card { background: var(--card); border-radius: 14px; padding: 0.875rem 1rem; border: 0.5px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.platform-logo { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+.platform-logo.vinted { background: rgba(9,177,186,0.15); color: var(--vinted); }
+.platform-logo.depop { background: rgba(255,73,34,0.12); color: var(--depop); }
+.platform-logo.wallapop { background: rgba(20,201,0,0.12); color: #0a9900; }
+.platform-logo.subito { background: rgba(255,140,0,0.12); color: var(--subito); }
+.platform-info { flex: 1; min-width: 0; }
+.platform-name { font-size: 14px; font-weight: 500; }
+.platform-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.platform-amount { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; white-space: nowrap; }
+.platform-bar-wrap { height: 3px; background: var(--bg); border-radius: 2px; margin-top: 5px; }
+.platform-bar { height: 3px; border-radius: 2px; }
+.check-icon { font-size: 18px; color: var(--accent); flex-shrink: 0; }
+
+/* SALES LIST */
+.sales-list { display: flex; flex-direction: column; gap: 8px; padding: 0 1.25rem; }
+.sale-item { background: var(--card); border-radius: 14px; padding: 0.875rem 1rem; border: 0.5px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.sale-thumb { width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.sale-info { flex: 1; min-width: 0; }
+.sale-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sale-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.sale-amount { text-align: right; flex-shrink: 0; }
+.sale-price { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); }
+.sale-net { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.badge { display: inline-block; padding: 2px 7px; border-radius: 20px; font-size: 10px; font-weight: 500; margin-left: 4px; }
+.badge-vinted { background: rgba(9,177,186,0.15); color: var(--vinted); }
+.badge-depop { background: rgba(255,73,34,0.12); color: var(--depop); }
+.badge-wallapop { background: rgba(20,201,0,0.12); color: #0a9900; }
+.badge-subito { background: rgba(255,140,0,0.12); color: var(--subito); }
+.badge-etsy { background: rgba(245,100,0,0.12); color: #F56400; }
+.badge-ebay { background: rgba(0,100,210,0.12); color: #0064D2; }
+
+.empty-state { text-align: center; padding: 2rem 1.25rem; color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+/* UPLOAD ZONE */
+.upload-zone { margin: 0 1.25rem 1rem; background: var(--card); border: 1.5px dashed var(--border); border-radius: 18px; padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+.upload-zone:active { background: var(--accent-light); border-color: var(--accent); }
+.upload-icon { width: 52px; height: 52px; background: var(--accent-light); border-radius: 14px; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; }
+.upload-icon i { font-size: 26px; color: var(--accent); }
+.upload-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.upload-sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.upload-btn { margin-top: 1.25rem; background: var(--text); color: #fff; border: none; padding: 11px 26px; border-radius: 24px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+
+/* AI PANEL */
+.ai-panel { margin: 0 1.25rem 1rem; background: var(--card); border-radius: 18px; border: 0.5px solid var(--border); overflow: hidden; }
+.ai-header { background: var(--text); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 10px; }
+.ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s ease-in-out infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.ai-header-text { color: #fff; font-size: 14px; font-weight: 500; }
+.ai-body { padding: 1.25rem; }
+.ai-loading { display: flex; flex-direction: column; gap: 10px; }
+.skeleton { height: 13px; background: var(--bg); border-radius: 6px; animation: shimmer 1.4s ease-in-out infinite; width: 100%; }
+@keyframes shimmer { 0%,100%{opacity:0.4} 50%{opacity:1} }
+.field-group { margin-bottom: 14px; }
+.field-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+.field-value { font-size: 15px; font-weight: 500; }
+.field-value.accent { color: var(--accent); }
+.field-value.large { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+.ai-actions { display: flex; gap: 8px; margin-top: 1rem; }
+.btn-primary { background: var(--accent); color: #fff; border: none; padding: 12px 16px; border-radius: 24px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; flex: 1; }
+.btn-secondary { background: var(--bg); color: var(--text); border: 0.5px solid var(--border); padding: 12px 16px; border-radius: 24px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; }
+.error-msg { font-size: 14px; color: var(--danger); line-height: 1.5; }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 1.25rem; }
+.stat-card { background: var(--card); border-radius: 14px; padding: 1rem; border: 0.5px solid var(--border); }
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.stat-value { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-top: 4px; }
+.stat-trend { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+.chart-wrap { margin: 0 1.25rem; background: var(--card); border-radius: 14px; padding: 1rem; border: 0.5px solid var(--border); }
+.bars { display: flex; align-items: flex-end; gap: 5px; height: 70px; }
+.bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.5s ease; }
+.bar-label { font-size: 9px; color: var(--muted); }
+
+/* SETTINGS */
+.plan-box { margin: 0 1.25rem; background: var(--card); border-radius: 14px; padding: 1rem 1.25rem; border: 0.5px solid var(--border); }
+.plan-name { font-size: 15px; font-weight: 500; }
+.plan-desc { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.btn-premium { margin-top: 1rem; width: 100%; background: var(--text); color: #fff; border: none; padding: 13px; border-radius: 24px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; }
+.settings-item { margin: 0.5rem 1.25rem 0; background: var(--card); border-radius: 14px; padding: 0.875rem 1rem; border: 0.5px solid var(--border); display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.settings-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.settings-icon i { font-size: 18px; color: var(--accent); }
+.settings-icon.danger { background: rgba(163,45,45,0.1); }
+.settings-icon.danger i { color: var(--danger); }
+.settings-name { font-size: 14px; font-weight: 500; }
+.settings-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* PREMIUM UI */
+.plan-box-free { background: var(--card); border-radius: 14px; padding: 1rem 1.25rem; border: 0.5px solid var(--border); margin: 0 1.25rem; }
+.plan-box-premium { background: var(--text); border-radius: 14px; padding: 1.25rem; margin: 0 1.25rem; position: relative; overflow: hidden; }
+.plan-box-premium::before { content: ''; position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; border-radius: 50%; background: rgba(29,158,117,0.2); }
+.plan-box-premium::after { content: ''; position: absolute; bottom: -20px; left: -20px; width: 70px; height: 70px; border-radius: 50%; background: rgba(29,158,117,0.1); }
+.plan-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+.plan-price-row { display: flex; align-items: baseline; gap: 4px; margin: 4px 0 2px; }
+.plan-price { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #fff; }
+.plan-period { font-size: 13px; color: rgba(255,255,255,0.5); }
+.plan-tagline { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 1rem; }
+.feature-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
+.feature-row { display: flex; align-items: flex-start; gap: 10px; }
+.feature-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(29,158,117,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.feature-icon i { font-size: 15px; color: var(--accent); }
+.feature-text { flex: 1; }
+.feature-title { font-size: 13px; font-weight: 500; color: #fff; line-height: 1.3; }
+.feature-desc { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+.btn-upgrade { width: 100%; background: var(--accent); color: #fff; border: none; padding: 14px; border-radius: 24px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; position: relative; z-index: 1; }
+.btn-upgrade:active { background: var(--accent-dark); }
+.usage-bar-wrap { background: var(--bg); border-radius: 6px; height: 6px; margin: 8px 0 4px; overflow: hidden; }
+.usage-bar { height: 6px; border-radius: 6px; background: var(--accent); transition: width 0.5s ease; }
+.usage-bar.warning { background: var(--amber); }
+.usage-bar.danger { background: var(--danger); }
+.usage-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+.free-features { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 14px; }
+.free-feature { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.free-feature i { font-size: 15px; color: var(--accent); }
+
+/* MODAL PREMIUM */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: flex; align-items: flex-end; backdrop-filter: blur(4px); }
+.modal-sheet { background: var(--card); border-radius: 24px 24px 0 0; padding: 1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom)); width: 100%; max-height: 90vh; overflow-y: auto; }
+.modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 1.25rem; }
+.modal-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; }
+.modal-feature { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+.modal-feature:last-of-type { border-bottom: none; }
+.modal-feature-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.modal-feature-icon i { font-size: 20px; color: var(--accent); }
+.modal-feature-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.modal-feature-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.modal-cta { margin-top: 1.5rem; }
+.modal-price-note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+/* ANNUNCI */
+.annuncio-panel { margin: 0 1.25rem 1rem; background: var(--card); border-radius: 18px; border: 0.5px solid var(--border); overflow: hidden; }
+.annuncio-header { background: linear-gradient(135deg, #1A1A18, #2a2a28); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; }
+.annuncio-header-left { display: flex; align-items: center; gap: 10px; }
+.annuncio-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s ease-in-out infinite; flex-shrink: 0; }
+.annuncio-header-text { color: #fff; font-size: 14px; font-weight: 500; }
+.lang-toggle { display: flex; background: rgba(255,255,255,0.1); border-radius: 20px; padding: 3px; gap: 2px; }
+.lang-btn { padding: 4px 12px; border-radius: 16px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; background: transparent; color: rgba(255,255,255,0.5); }
+.lang-btn.active { background: var(--accent); color: #fff; }
+.annuncio-body { padding: 1.25rem; }
+.annuncio-section { margin-bottom: 1rem; }
+.annuncio-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+.annuncio-text { font-size: 14px; line-height: 1.6; color: var(--text); background: var(--bg); border-radius: 10px; padding: 10px 12px; }
+.annuncio-hashtags { display: flex; flex-wrap: wrap; gap: 6px; }
+.hashtag { background: var(--accent-light); color: var(--accent-dark); font-size: 12px; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+.copy-btn { background: none; border: none; cursor: pointer; color: var(--accent); font-size: 12px; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 4px; padding: 0; }
+.copy-btn i { font-size: 14px; }
+.annuncio-actions { display: flex; gap: 8px; margin-top: 0.5rem; }
+.annuncio-skeleton { display: flex; flex-direction: column; gap: 10px; padding: 1.25rem; }
+
+/* BOTTOM NAV */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 0.5px solid var(--border); display: flex; padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom)); z-index: 100; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 6px 0; border: none; background: none; color: var(--muted); transition: color 0.15s; }
+.nav-item i { font-size: 22px; }
+.nav-item span { font-size: 10px; font-family: 'DM Sans', sans-serif; }
+.nav-item.active { color: var(--accent); }
+
+.platform-logo.etsy { background: rgba(245,100,0,0.12); color: var(--etsy); }
+.platform-logo.ebay { background: rgba(0,100,210,0.12); color: var(--ebay); }
+
+/* INSTALL BANNER */
+.install-banner { margin: 0.75rem 1.25rem; background: var(--accent-light); border-radius: 16px; padding: 1rem 1.25rem; border: 1px solid rgba(29,158,117,0.2); }
+.install-banner-title { font-size: 14px; font-weight: 600; color: var(--accent-dark); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+.install-banner-text { font-size: 13px; color: var(--accent-dark); line-height: 1.6; }
+.install-banner-step { display: flex; align-items: flex-start; gap: 8px; margin-top: 6px; }
+.install-banner-num { background: var(--accent); color: #fff; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  </style>
+</head>
+<body>
+
+  <!-- SCHERMATA: HOME -->
+  <div id="screen-home" class="screen active">
+    <div class="topbar">
+      <div>
+        <div class="greeting">Buongiorno 👋</div>
+        <div class="page-title">Le tue vendite</div>
+      </div>
+      <div class="avatar">V</div>
+    </div>
+
+    <div id="install-banner" class="install-banner">
+      <div class="install-banner-title">
+        📲 Installa l'app sul telefono
+        <button onclick="document.getElementById('install-banner').style.display='none'; localStorage.setItem('installDismissed','1')" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--accent-dark)">✕</button>
+      </div>
+      <div class="install-banner-text">
+        <strong>iPhone:</strong>
+        <div class="install-banner-step"><div class="install-banner-num">1</div><span>Tocca il pulsante <strong>Condividi</strong> (il quadrato con la freccia su) in Safari</span></div>
+        <div class="install-banner-step"><div class="install-banner-num">2</div><span>Scorri e tocca <strong>"Aggiungi alla schermata Home"</strong></span></div>
+        <div class="install-banner-step"><div class="install-banner-num">3</div><span>Tocca <strong>Aggiungi</strong> — l'icona appare sul telefono!</span></div>
+        <br>
+        <strong>Android:</strong>
+        <div class="install-banner-step"><div class="install-banner-num">1</div><span>Tocca i <strong>tre puntini</strong> in alto a destra in Chrome</span></div>
+        <div class="install-banner-step"><div class="install-banner-num">2</div><span>Tocca <strong>"Aggiungi alla schermata Home"</strong></span></div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-label">Guadagno maggio</div>
+      <div class="hero-amount" id="home-totale">€0,00</div>
+      <div class="hero-sub">Netto dopo fee e spedizioni</div>
+      <div class="hero-pills" id="home-pills"></div>
+    </div>
+
+    <div class="section-title">Per piattaforma</div>
+    <div class="platforms" id="home-platforms"></div>
+
+    <div class="section-title">Ultime vendite</div>
+    <div class="sales-list" id="home-sales"></div>
+
+    <div style="height:80px"></div>
+  </div>
+
+  <!-- SCHERMATA: AGGIUNGI -->
+  <div id="screen-upload" class="screen">
+    <div class="topbar">
+      <div>
+        <div class="greeting">Nuova vendita</div>
+        <div class="page-title">Carica screenshot</div>
+      </div>
+    </div>
+
+    <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+      <div class="upload-icon"><i class="ti ti-screenshot"></i></div>
+      <div class="upload-title">Carica screenshot vendita</div>
+      <div class="upload-sub">App Vinted, Depop, Wallapop, Subito<br>o email di conferma — l'AI capisce tutto</div>
+      <button class="upload-btn"><i class="ti ti-camera"></i> Scegli immagine</button>
+    </div>
+    <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleUpload(this)">
+
+    <div class="ai-panel" id="ai-panel" style="display:none">
+      <div class="ai-header">
+        <div class="ai-dot" id="ai-dot"></div>
+        <div class="ai-header-text" id="ai-status">AI in elaborazione…</div>
+      </div>
+      <div class="ai-body">
+        <div class="ai-loading" id="ai-loading">
+          <div class="skeleton"></div>
+          <div class="skeleton" style="width:75%"></div>
+          <div class="skeleton" style="width:55%"></div>
+        </div>
+        <div id="ai-result" style="display:none">
+          <div class="field-group">
+            <div class="field-label">Piattaforma</div>
+            <div class="field-value" id="res-platform">—</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Articolo</div>
+            <div class="field-value" id="res-item">—</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Prezzo vendita</div>
+            <div class="field-value" id="res-price">—</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Fee piattaforma</div>
+            <div class="field-value" id="res-fee">—</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Guadagno netto</div>
+            <div class="field-value accent large" id="res-net">—</div>
+          </div>
+          <div class="ai-actions">
+            <button class="btn-primary" onclick="saveVendita()">✓ Salva vendita</button>
+            <button class="btn-secondary" onclick="resetUpload()">Annulla</button>
+          </div>
+          <div id="btn-genera-wrap" style="margin-top:10px;display:none">
+            <button class="btn-primary" style="width:100%;background:var(--text);display:flex;align-items:center;justify-content:center;gap:8px" onclick="generaAnnuncio()">
+              <i class="ti ti-writing"></i> Genera annuncio ⭐
+            </button>
+          </div>
+        </div>
+        <div id="ai-error" style="display:none">
+          <div class="error-msg">Non sono riuscito a leggere lo screenshot. Prova con un'immagine più nitida.</div>
+          <button class="btn-secondary" style="margin-top:12px" onclick="resetUpload()">Riprova</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="annuncio-panel" id="annuncio-panel" style="display:none">
+      <div class="annuncio-header">
+        <div class="annuncio-header-left">
+          <div class="annuncio-dot" id="annuncio-dot"></div>
+          <div class="annuncio-header-text" id="annuncio-status">Generando annuncio…</div>
+        </div>
+        <div class="lang-toggle" id="lang-toggle" style="display:none">
+          <button class="lang-btn active" id="btn-it" onclick="switchLang('it')">🇮🇹 IT</button>
+          <button class="lang-btn" id="btn-en" onclick="switchLang('en')">🇬🇧 EN</button>
+        </div>
+      </div>
+      <div class="annuncio-skeleton" id="annuncio-loading">
+        <div class="skeleton"></div>
+        <div class="skeleton" style="width:85%"></div>
+        <div class="skeleton" style="width:70%"></div>
+        <div class="skeleton" style="width:90%"></div>
+        <div class="skeleton" style="width:60%"></div>
+      </div>
+      <div class="annuncio-body" id="annuncio-result" style="display:none">
+        <div class="annuncio-section">
+          <div class="annuncio-label">
+            Titolo
+            <button class="copy-btn" onclick="copyText('annuncio-titolo')"><i class="ti ti-copy"></i> Copia</button>
+          </div>
+          <div class="annuncio-text" id="annuncio-titolo"></div>
+        </div>
+        <div class="annuncio-section">
+          <div class="annuncio-label">
+            Descrizione
+            <button class="copy-btn" onclick="copyText('annuncio-desc')"><i class="ti ti-copy"></i> Copia</button>
+          </div>
+          <div class="annuncio-text" id="annuncio-desc"></div>
+        </div>
+        <div class="annuncio-section">
+          <div class="annuncio-label">Hashtag</div>
+          <div class="annuncio-hashtags" id="annuncio-hashtags"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Piattaforme supportate</div>
+    <div class="platforms">
+      <div class="platform-card"><div class="platform-logo vinted">V</div><div class="platform-info"><div class="platform-name">Vinted</div><div class="platform-detail">App + email conferma</div></div><i class="ti ti-check check-icon"></i></div>
+      <div class="platform-card"><div class="platform-logo depop">D</div><div class="platform-info"><div class="platform-name">Depop</div><div class="platform-detail">App + email conferma</div></div><i class="ti ti-check check-icon"></i></div>
+      <div class="platform-card"><div class="platform-logo wallapop">W</div><div class="platform-info"><div class="platform-name">Wallapop</div><div class="platform-detail">App + email conferma</div></div><i class="ti ti-check check-icon"></i></div>
+      <div class="platform-card"><div class="platform-logo subito">S</div><div class="platform-info"><div class="platform-name">Subito.it</div><div class="platform-detail">App + email conferma</div></div><i class="ti ti-check check-icon"></i></div>
+      <div class="platform-card"><div class="platform-logo etsy">E</div><div class="platform-info"><div class="platform-name">Etsy</div><div class="platform-detail">App + email conferma</div></div><i class="ti ti-check check-icon"></i></div>
+      <div class="platform-card"><div class="platform-logo ebay">e</div><div class="platform-info"><div class="platform-name">eBay</div><div class="platform-detail">App + email conferma</div></div><i class="ti ti-check check-icon"></i></div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+
+  <!-- SCHERMATA: STATISTICHE -->
+  <div id="screen-stats" class="screen">
+    <div class="topbar">
+      <div>
+        <div class="greeting">Panoramica</div>
+        <div class="page-title">Statistiche</div>
+      </div>
+    </div>
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="section-title">Andamento mensile</div>
+    <div class="chart-wrap">
+      <div class="bars" id="stats-bars"></div>
+    </div>
+    <div class="section-title">Per piattaforma</div>
+    <div class="platforms" id="stats-platforms"></div>
+    <div style="height:80px"></div>
+  </div>
+
+  <!-- SCHERMATA: IMPOSTAZIONI -->
+  <div id="screen-settings" class="screen">
+    <div class="topbar">
+      <div>
+        <div class="greeting">Configurazione</div>
+        <div class="page-title">Impostazioni</div>
+      </div>
+    </div>
+
+    <!-- PIANO FREE (visibile se non premium) -->
+    <div id="block-free" style="display:block">
+      <div class="section-title">Piano attivo</div>
+      <div class="plan-box-free">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div>
+            <div class="plan-name" style="font-size:16px;font-weight:600">Piano Free</div>
+            <div class="plan-desc" style="margin-top:2px">Gratis per sempre</div>
+          </div>
+          <div style="background:var(--bg);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--muted);font-weight:500">Attivo</div>
+        </div>
+        <div class="free-features">
+          <div class="free-feature"><i class="ti ti-check"></i>Dashboard vendite base</div>
+          <div class="free-feature"><i class="ti ti-check"></i>Statistiche per piattaforma</div>
+          <div class="free-feature"><i class="ti ti-check"></i>5 analisi AI screenshot/mese</div>
+          <div class="free-feature" style="color:#ccc"><i class="ti ti-lock" style="color:#ccc"></i>Annunci ottimizzati 🇮🇹 + 🇬🇧</div>
+          <div class="free-feature" style="color:#ccc"><i class="ti ti-lock" style="color:#ccc"></i>Storico completo + trend + top articoli</div>
+          <div class="free-feature" style="color:#ccc"><i class="ti ti-lock" style="color:#ccc"></i>Export CSV</div>
+        </div>
+        <div class="usage-label"><span>Screenshot AI usati questo mese</span><span id="usage-text">0 / 5</span></div>
+        <div class="usage-bar-wrap"><div class="usage-bar" id="usage-bar" style="width:0%"></div></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;margin-bottom:1rem" id="usage-reset">Si azzera il 1° del mese</div>
+        <button class="btn-upgrade" onclick="openPremiumModal()">
+          <i class="ti ti-star"></i> Passa a Premium — €3,99/mese
+        </button>
+      </div>
+    </div>
+
+    <!-- PIANO PREMIUM (visibile se attivo) -->
+    <div id="block-premium" style="display:none">
+      <div class="section-title">Piano attivo</div>
+      <div class="plan-box-premium">
+        <div class="plan-badge"><i class="ti ti-star" style="font-size:10px"></i> Premium</div>
+        <div class="plan-price-row">
+          <div class="plan-price">€3,99</div>
+          <div class="plan-period">/mese</div>
+        </div>
+        <div class="plan-tagline">Tutte le funzionalità sbloccate</div>
+        <div class="feature-list">
+          <div class="feature-row">
+            <div class="feature-icon"><i class="ti ti-camera"></i></div>
+            <div class="feature-text">
+              <div class="feature-title">Screenshot illimitati</div>
+              <div class="feature-desc">Nessun limite mensile · uso personale normale</div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon"><i class="ti ti-writing"></i></div>
+            <div class="feature-text">
+              <div class="feature-title">Annunci ottimizzati in 🇮🇹 + 🇬🇧</div>
+              <div class="feature-desc">Titolo + descrizione in italiano e inglese, pronti da copiare</div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon"><i class="ti ti-chart-pie"></i></div>
+            <div class="feature-text">
+              <div class="feature-title">Statistiche avanzate</div>
+              <div class="feature-desc">Storico completo · trend mensili · articoli più redditizi</div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon"><i class="ti ti-file-spreadsheet"></i></div>
+            <div class="feature-text">
+              <div class="feature-title">Export CSV</div>
+              <div class="feature-desc">Scarica tutte le tue vendite in Excel o Google Sheets</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);text-align:center">
+          Abbonamento attivo · <span style="text-decoration:underline;cursor:pointer" onclick="cancelPremium()">Disdici</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Dati salvati</div>
+    <div class="settings-item">
+      <div class="settings-icon"><i class="ti ti-database"></i></div>
+      <div class="settings-info">
+        <div class="settings-name">Vendite registrate</div>
+        <div class="settings-detail" id="settings-count">0 vendite</div>
+      </div>
+    </div>
+    <div class="settings-item" onclick="if(confirm('Cancellare tutti i dati?')){localStorage.removeItem('venduto_sales');localStorage.removeItem('venduto_screenshots');location.reload()}">
+      <div class="settings-icon danger"><i class="ti ti-trash"></i></div>
+      <div class="settings-info">
+        <div class="settings-name" style="color:#A32D2D">Cancella tutti i dati</div>
+        <div class="settings-detail">Azione irreversibile</div>
+      </div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+
+  <!-- MODAL PREMIUM -->
+  <div id="premium-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closePremiumModal()">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Passa a Premium ⭐</div>
+      <div class="modal-sub">Sblocca tutte le funzionalità per €3,99/mese</div>
+
+      <div class="modal-feature">
+        <div class="modal-feature-icon"><i class="ti ti-camera"></i></div>
+        <div>
+          <div class="modal-feature-title">Screenshot illimitati</div>
+          <div class="modal-feature-desc">Analizza tutte le tue vendite senza limiti mensili. Pensato per uso personale — non per utilizzi automatizzati.</div>
+        </div>
+      </div>
+      <div class="modal-feature">
+        <div class="modal-feature-icon"><i class="ti ti-writing"></i></div>
+        <div>
+          <div class="modal-feature-title">Annunci ottimizzati 🇮🇹 + 🇬🇧</div>
+          <div class="modal-feature-desc">L'AI genera titolo e descrizione ottimizzati in italiano e inglese. Raggiungi acquirenti in tutta Europa su Vinted, Depop e Wallapop.</div>
+        </div>
+      </div>
+      <div class="modal-feature">
+        <div class="modal-feature-icon"><i class="ti ti-chart-pie"></i></div>
+        <div>
+          <div class="modal-feature-title">Statistiche avanzate</div>
+          <div class="modal-feature-desc">Storico completo delle vendite, trend mensili e gli articoli che ti rendono di più per categoria e piattaforma.</div>
+        </div>
+      </div>
+      <div class="modal-feature">
+        <div class="modal-feature-icon"><i class="ti ti-file-spreadsheet"></i></div>
+        <div>
+          <div class="modal-feature-title">Export CSV</div>
+          <div class="modal-feature-desc">Scarica tutte le tue vendite in formato CSV, compatibile con Excel e Google Sheets. Utile anche per la dichiarazione dei redditi.</div>
+        </div>
+      </div>
+
+      <div class="modal-cta">
+        <button class="btn-upgrade" onclick="activatePremium()">
+          <i class="ti ti-star"></i> Attiva Premium — €3,99/mese
+        </button>
+        <div class="modal-price-note">Disdici in qualsiasi momento · Nessun vincolo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="goTo('home',this)" aria-label="Home">
+      <i class="ti ti-home"></i><span>Home</span>
+    </button>
+    <button class="nav-item" onclick="goTo('upload',this)" aria-label="Aggiungi vendita">
+      <i class="ti ti-upload"></i><span>Aggiungi</span>
+    </button>
+    <button class="nav-item" onclick="goTo('stats',this)" aria-label="Statistiche">
+      <i class="ti ti-chart-bar"></i><span>Statistiche</span>
+    </button>
+    <button class="nav-item" onclick="goTo('settings',this)" aria-label="Impostazioni">
+      <i class="ti ti-settings"></i><span>Impostazioni</span>
+    </button>
+  </nav>
+
+<script>
+// ─── STORAGE ───────────────────────────────────────────────
+const STORAGE_KEY = 'venduto_sales';
+
+function getSales() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+
+function saveSale(sale) {
+  const sales = getSales();
+  sale.id = Date.now();
+  sale.date = new Date().toISOString();
+  sales.unshift(sale);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sales));
+}
+
+// ─── NAVIGAZIONE ───────────────────────────────────────────
+function goTo(screen, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+  if (screen === 'home') renderHome();
+
+// Mostra banner installazione se non già installata e non già chiusa
+if (!window.matchMedia('(display-mode: standalone)').matches && !localStorage.getItem('installDismissed')) {
+  document.getElementById('install-banner').style.display = 'block';
+}
+  if (screen === 'stats') renderStats();
+  if (screen === 'settings') renderSettings();
+}
+
+// ─── PIATTAFORME ───────────────────────────────────────────
+const PLATFORMS = {
+  vinted:   { label: 'Vinted',    color: '#09B1BA', class: 'vinted',   badge: 'badge-vinted',   emoji: '🟦' },
+  depop:    { label: 'Depop',     color: '#FF4922', class: 'depop',    badge: 'badge-depop',    emoji: '🔴' },
+  wallapop: { label: 'Wallapop',  color: '#14C900', class: 'wallapop', badge: 'badge-wallapop', emoji: '🟢' },
+  subito:   { label: 'Subito',    color: '#FF8C00', class: 'subito',   badge: 'badge-subito',   emoji: '🟠' },
+  etsy:     { label: 'Etsy',      color: '#F56400', class: 'etsy',     badge: 'badge-etsy',     emoji: '🧡' },
+  ebay:     { label: 'eBay',      color: '#0064D2', class: 'ebay',     badge: 'badge-ebay',     emoji: '🔵' },
+};
+
+function getPlatform(name) {
+  if (!name) return PLATFORMS.vinted;
+  const key = name.toLowerCase();
+  return PLATFORMS[key] || PLATFORMS.vinted;
+}
+
+// ─── HOME ──────────────────────────────────────────────────
+function renderHome() {
+  const sales = getSales();
+  const now = new Date();
+  const monthSales = sales.filter(s => {
+    const d = new Date(s.date);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  });
+
+  const totale = monthSales.reduce((acc, s) => acc + (s.net || 0), 0);
+  document.getElementById('home-totale').textContent = '€' + totale.toFixed(2).replace('.', ',');
+
+  // Pills per piattaforma
+  const byPlatform = {};
+  monthSales.forEach(s => {
+    const p = (s.platform || 'vinted').toLowerCase();
+    byPlatform[p] = (byPlatform[p] || 0) + (s.net || 0);
+  });
+
+  const pillsEl = document.getElementById('home-pills');
+  pillsEl.innerHTML = Object.entries(byPlatform).map(([p, v]) => {
+    const pl = getPlatform(p);
+    return `<div class="hero-pill"><div class="pill-dot" style="background:${pl.color}"></div>${pl.label} €${v.toFixed(0)}</div>`;
+  }).join('');
+
+  // Platform bars
+  const platformsEl = document.getElementById('home-platforms');
+  const maxVal = Math.max(...Object.values(byPlatform), 1);
+  if (Object.keys(byPlatform).length === 0) {
+    platformsEl.innerHTML = '<div class="empty-state">Nessuna vendita questo mese.<br>Carica il tuo primo screenshot!</div>';
+  } else {
+    platformsEl.innerHTML = Object.entries(byPlatform).map(([p, v]) => {
+      const pl = getPlatform(p);
+      const pct = Math.round((v / maxVal) * 100);
+      return `<div class="platform-card">
+        <div class="platform-logo ${pl.class}">${pl.label[0]}</div>
+        <div class="platform-info">
+          <div class="platform-name">${pl.label}</div>
+          <div class="platform-bar-wrap"><div class="platform-bar" style="width:${pct}%;background:${pl.color}"></div></div>
+        </div>
+        <div class="platform-amount">€${v.toFixed(0)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Ultime vendite
+  const salesEl = document.getElementById('home-sales');
+  if (sales.length === 0) {
+    salesEl.innerHTML = '<div class="empty-state">Le tue vendite appariranno qui.<br>Inizia caricando uno screenshot! 📸</div>';
+  } else {
+    salesEl.innerHTML = sales.slice(0, 5).map(s => {
+      const pl = getPlatform(s.platform);
+      const d = new Date(s.date);
+      const dateStr = d.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
+      return `<div class="sale-item">
+        <div class="sale-thumb" style="background:${pl.color}22">🛍️</div>
+        <div class="sale-info">
+          <div class="sale-name">${s.item || 'Articolo'} <span class="badge ${pl.badge}">${pl.label}</span></div>
+          <div class="sale-meta">${dateStr}</div>
+        </div>
+        <div class="sale-amount">
+          <div class="sale-price">+€${(s.price || 0).toFixed(0)}</div>
+          <div class="sale-net">netto €${(s.net || 0).toFixed(2).replace('.', ',')}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ─── UPLOAD & AI ───────────────────────────────────────────
+let currentResult = null;
+
+function handleUpload(input) {
+  if (!input.files || !input.files[0]) return;
+  if (!canAnalyze()) {
+    openPremiumModal();
+    input.value = '';
+    return;
+  }
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => analyzeImage(e.target.result, file.name);
+  reader.readAsDataURL(file);
+}
+
+async function analyzeImage(base64Data, filename) {
+  incrementScreenshot();
+  document.getElementById('upload-zone').style.display = 'none';
+  const panel = document.getElementById('ai-panel');
+  panel.style.display = 'block';
+  document.getElementById('ai-loading').style.display = 'flex';
+  document.getElementById('ai-result').style.display = 'none';
+  document.getElementById('ai-error').style.display = 'none';
+  document.getElementById('ai-dot').style.animation = 'pulse 1.5s ease-in-out infinite';
+  document.getElementById('ai-status').textContent = 'AI in elaborazione…';
+
+  const base64 = base64Data.split(',')[1];
+  const mediaType = base64Data.split(';')[0].split(':')[1];
+
+  const prompt = `Sei un assistente per venditori second hand italiani. Analizza questo screenshot e estrai i dati della vendita in formato JSON.
+
+Restituisci SOLO un oggetto JSON valido con questi campi:
+{
+  "platform": "vinted" | "depop" | "wallapop" | "subito" | "etsy" | "ebay" | "altro",
+  "item": "nome articolo (marca + tipo + taglia se visibile)",
+  "price": numero (prezzo di vendita in euro),
+  "fee": numero (commissione piattaforma in euro, 0 se non visibile),
+  "net": numero (guadagno netto = price - fee),
+  "confidence": "alta" | "media" | "bassa"
+}
+
+Se non riesci a estrarre i dati, restituisci: {"error": "non leggibile"}`;
+
+  try {
+    const response = await fetch('/.netlify/functions/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        image: base64,
+        mediaType: mediaType
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('JSON non trovato');
+    const result = JSON.parse(jsonMatch[0]);
+    if (result.error) throw new Error(result.error);
+
+    currentResult = result;
+    showResult(result);
+  } catch (err) {
+    console.error(err);
+    document.getElementById('ai-loading').style.display = 'none';
+    document.getElementById('ai-error').style.display = 'block';
+    document.getElementById('ai-dot').style.animation = 'none';
+    document.getElementById('ai-dot').style.background = '#A32D2D';
+    document.getElementById('ai-status').textContent = 'Errore lettura';
+  }
+}
+
+function showResult(r) {
+  document.getElementById('ai-loading').style.display = 'none';
+  document.getElementById('ai-result').style.display = 'block';
+  document.getElementById('ai-dot').style.animation = 'none';
+  document.getElementById('ai-dot').style.background = '#1D9E75';
+  document.getElementById('ai-status').textContent = 'Dati estratti ✓';
+
+  const pl = getPlatform(r.platform);
+  document.getElementById('res-platform').textContent = pl.emoji + ' ' + pl.label;
+  document.getElementById('res-item').textContent = r.item || '—';
+  document.getElementById('res-price').textContent = '€' + (r.price || 0).toFixed(2).replace('.', ',');
+  document.getElementById('res-fee').textContent = '€' + (r.fee || 0).toFixed(2).replace('.', ',');
+  document.getElementById('res-net').textContent = '€' + (r.net || 0).toFixed(2).replace('.', ',');
+
+  // Mostra pulsante genera annuncio solo per premium
+  document.getElementById('btn-genera-wrap').style.display = isPremium() ? 'block' : 'none';
+}
+
+// ─── GENERA ANNUNCIO ───────────────────────────────────────
+let annuncioData = { it: null, en: null };
+let currentLang = 'it';
+
+async function generaAnnuncio() {
+  if (!currentResult) return;
+  if (!isPremium()) { openPremiumModal(); return; }
+
+  const panel = document.getElementById('annuncio-panel');
+  panel.style.display = 'block';
+  document.getElementById('annuncio-loading').style.display = 'flex';
+  document.getElementById('annuncio-result').style.display = 'none';
+  document.getElementById('lang-toggle').style.display = 'none';
+  document.getElementById('annuncio-dot').style.animation = 'pulse 1.5s ease-in-out infinite';
+  document.getElementById('annuncio-status').textContent = 'Generando annuncio…';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const pl = getPlatform(currentResult.platform);
+  const prompt = `Sei un esperto di vendita second hand. Genera un annuncio ottimizzato per ${pl.label} per il seguente articolo:
+
+Articolo: ${currentResult.item || 'non specificato'}
+Prezzo: €${currentResult.price || 0}
+Piattaforma: ${pl.label}
+
+Genera il testo in ITALIANO e in INGLESE. Rispondi SOLO con un oggetto JSON valido:
+{
+  "it": {
+    "titolo": "titolo breve e accattivante max 60 caratteri",
+    "descrizione": "descrizione 5-7 righe, tono amichevole, menciona condizioni, taglie se rilevanti, spedizione",
+    "hashtag": ["hashtag1", "hashtag2", "hashtag3", "hashtag4", "hashtag5"]
+  },
+  "en": {
+    "titolo": "short catchy title max 60 chars",
+    "descrizione": "5-7 lines description, friendly tone, mention condition, size if relevant, shipping",
+    "hashtag": ["hashtag1", "hashtag2", "hashtag3", "hashtag4", "hashtag5"]
+  }
+}`;
+
+  try {
+    const response = await fetch('/.netlify/functions/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('JSON non trovato');
+    annuncioData = JSON.parse(jsonMatch[0]);
+
+    document.getElementById('annuncio-loading').style.display = 'none';
+    document.getElementById('annuncio-result').style.display = 'block';
+    document.getElementById('lang-toggle').style.display = 'flex';
+    document.getElementById('annuncio-dot').style.animation = 'none';
+    document.getElementById('annuncio-dot').style.background = '#1D9E75';
+    document.getElementById('annuncio-status').textContent = 'Annuncio pronto ✓';
+    switchLang('it');
+  } catch (err) {
+    console.error(err);
+    document.getElementById('annuncio-loading').style.display = 'none';
+    document.getElementById('annuncio-dot').style.animation = 'none';
+    document.getElementById('annuncio-dot').style.background = '#A32D2D';
+    document.getElementById('annuncio-status').textContent = 'Errore generazione';
+  }
+}
+
+function switchLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-it').classList.toggle('active', lang === 'it');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  const d = annuncioData[lang];
+  if (!d) return;
+  document.getElementById('annuncio-titolo').textContent = d.titolo || '';
+  document.getElementById('annuncio-desc').textContent = d.descrizione || '';
+  document.getElementById('annuncio-hashtags').innerHTML = (d.hashtag || []).map(h =>
+    `<span class="hashtag">#${h.replace(/^#/, '')}</span>`
+  ).join('');
+}
+
+function copyText(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    const btns = document.querySelectorAll('.copy-btn');
+    btns.forEach(b => { if (b.getAttribute('onclick').includes(id)) { b.innerHTML = '<i class="ti ti-check"></i> Copiato!'; setTimeout(() => b.innerHTML = '<i class="ti ti-copy"></i> Copia', 2000); } });
+  });
+}
+
+function saveVendita() {
+  if (!currentResult) return;
+  saveSale(currentResult);
+  currentResult = null;
+  resetUpload();
+  goTo('home', document.querySelector('.nav-item'));
+}
+
+function resetUpload() {
+  document.getElementById('upload-zone').style.display = 'block';
+  document.getElementById('ai-panel').style.display = 'none';
+  document.getElementById('annuncio-panel').style.display = 'none';
+  document.getElementById('file-input').value = '';
+  currentResult = null;
+  annuncioData = { it: null, en: null };
+}
+
+// ─── STATISTICHE ───────────────────────────────────────────
+function renderStats() {
+  const sales = getSales();
+  const totale = sales.reduce((a, s) => a + (s.net || 0), 0);
+  const media = sales.length > 0 ? totale / sales.length : 0;
+
+  const byPlatform = {};
+  sales.forEach(s => {
+    const p = (s.platform || 'vinted').toLowerCase();
+    byPlatform[p] = (byPlatform[p] || 0) + (s.net || 0);
+  });
+  const topPlatform = Object.entries(byPlatform).sort((a, b) => b[1] - a[1])[0];
+
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Totale</div><div class="stat-value" style="color:var(--accent)">€${totale.toFixed(0)}</div><div class="stat-trend">${sales.length} vendite</div></div>
+    <div class="stat-card"><div class="stat-label">Media vendita</div><div class="stat-value">€${media.toFixed(0)}</div><div class="stat-trend">per articolo</div></div>
+    <div class="stat-card"><div class="stat-label">Vendite</div><div class="stat-value">${sales.length}</div><div class="stat-trend">totali registrate</div></div>
+    <div class="stat-card"><div class="stat-label">Top piattaforma</div><div class="stat-value" style="font-size:16px">${topPlatform ? getPlatform(topPlatform[0]).label : '—'}</div><div class="stat-trend">${topPlatform ? '€' + topPlatform[1].toFixed(0) : 'Nessuna'}</div></div>
+  `;
+
+  // Mini grafico ultimi 6 mesi
+  const months = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    months.push({ month: d.getMonth(), year: d.getFullYear(), label: d.toLocaleDateString('it-IT', { month: 'short' }) });
+  }
+  const monthTotals = months.map(m => {
+    return sales.filter(s => {
+      const d = new Date(s.date);
+      return d.getMonth() === m.month && d.getFullYear() === m.year;
+    }).reduce((a, s) => a + (s.net || 0), 0);
+  });
+  const maxMonth = Math.max(...monthTotals, 1);
+  document.getElementById('stats-bars').innerHTML = monthTotals.map((v, i) => {
+    const pct = Math.max(Math.round((v / maxMonth) * 100), 5);
+    const isLast = i === monthTotals.length - 1;
+    return `<div class="bar-col">
+      <div class="bar" style="height:${pct}%;background:${isLast ? 'var(--accent)' : 'var(--border)'}"></div>
+      <div class="bar-label" style="${isLast ? 'color:var(--accent);font-weight:600' : ''}">${months[i].label}</div>
+    </div>`;
+  }).join('');
+
+  // Per piattaforma
+  const maxVal = Math.max(...Object.values(byPlatform), 1);
+  const platformsEl = document.getElementById('stats-platforms');
+  if (Object.keys(byPlatform).length === 0) {
+    platformsEl.innerHTML = '<div class="empty-state">Nessun dato ancora.<br>Aggiungi la tua prima vendita!</div>';
+  } else {
+    platformsEl.innerHTML = Object.entries(byPlatform).sort((a, b) => b[1] - a[1]).map(([p, v]) => {
+      const pl = getPlatform(p);
+      const pct = Math.round((v / maxVal) * 100);
+      return `<div class="platform-card">
+        <div class="platform-logo ${pl.class}">${pl.label[0]}</div>
+        <div class="platform-info">
+          <div class="platform-name">${pl.label}</div>
+          <div class="platform-bar-wrap"><div class="platform-bar" style="width:${pct}%;background:${pl.color}"></div></div>
+        </div>
+        <div class="platform-amount">€${v.toFixed(0)}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ─── PREMIUM ───────────────────────────────────────────────
+const SCREENSHOT_KEY = 'venduto_screenshots';
+const PREMIUM_KEY = 'venduto_premium';
+const SCREENSHOT_LIMIT = 5;
+
+function isPremium() {
+  return localStorage.getItem(PREMIUM_KEY) === '1';
+}
+
+function getScreenshotCount() {
+  try {
+    const data = JSON.parse(localStorage.getItem(SCREENSHOT_KEY)) || {};
+    const now = new Date();
+    const key = `${now.getFullYear()}-${now.getMonth()}`;
+    return data[key] || 0;
+  } catch { return 0; }
+}
+
+function incrementScreenshot() {
+  try {
+    const data = JSON.parse(localStorage.getItem(SCREENSHOT_KEY)) || {};
+    const now = new Date();
+    const key = `${now.getFullYear()}-${now.getMonth()}`;
+    data[key] = (data[key] || 0) + 1;
+    localStorage.setItem(SCREENSHOT_KEY, JSON.stringify(data));
+  } catch {}
+}
+
+function canAnalyze() {
+  if (isPremium()) return true;
+  return getScreenshotCount() < SCREENSHOT_LIMIT;
+}
+
+function openPremiumModal() {
+  document.getElementById('premium-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePremiumModal() {
+  document.getElementById('premium-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function activatePremium() {
+  window.open('https://buy.stripe.com/test_5kQbJ06066VncbQ17VcZa00', '_blank');
+}
+
+function cancelPremium() {
+  if (confirm('Sei sicuro di voler disdire il piano Premium?')) {
+    localStorage.removeItem(PREMIUM_KEY);
+    renderSettings();
+  }
+}
+
+// ─── IMPOSTAZIONI ──────────────────────────────────────────
+function renderSettings() {
+  const sales = getSales();
+  document.getElementById('settings-count').textContent = sales.length + ' vendite registrate';
+
+  const premium = isPremium();
+  document.getElementById('block-free').style.display = premium ? 'none' : 'block';
+  document.getElementById('block-premium').style.display = premium ? 'block' : 'none';
+
+  if (!premium) {
+    const used = getScreenshotCount();
+    const pct = Math.min(Math.round((used / SCREENSHOT_LIMIT) * 100), 100);
+    document.getElementById('usage-text').textContent = used + ' / ' + SCREENSHOT_LIMIT;
+    const bar = document.getElementById('usage-bar');
+    bar.style.width = pct + '%';
+    bar.className = 'usage-bar' + (pct >= 100 ? ' danger' : pct >= 60 ? ' warning' : '');
+    const remaining = SCREENSHOT_LIMIT - used;
+    const now = new Date();
+    const firstNext = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const days = Math.ceil((firstNext - now) / (1000 * 60 * 60 * 24));
+    document.getElementById('usage-reset').textContent = remaining > 0
+      ? `Ti rimangono ${remaining} analisi · Si azzera tra ${days} giorni`
+      : `Limite raggiunto · Si azzera tra ${days} giorni`;
+  }
+}
+
+// ─── INIT ──────────────────────────────────────────────────
+renderHome();
+
+// Mostra banner installazione se non già installata e non già chiusa
+if (!window.matchMedia('(display-mode: standalone)').matches && !localStorage.getItem('installDismissed')) {
+  document.getElementById('install-banner').style.display = 'block';
+}
+
+// Rileva redirect da Stripe dopo pagamento riuscito
+if (window.location.search.includes('premium=success')) {
+  localStorage.setItem(PREMIUM_KEY, '1');
+  history.replaceState(null, '', window.location.pathname);
+  goTo('settings', document.querySelectorAll('.nav-item')[3]);
+  setTimeout(() => {
+    renderSettings();
+    alert('🎉 Benvenuto nel Piano Premium!\nTutte le funzionalità sono ora sbloccate.');
+  }, 300);
+}
+</script>
+</body>
+</html>
