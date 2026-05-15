@@ -754,10 +754,16 @@ Se non riesci a estrarre i dati, restituisci: {"error": "non leggibile"}`;
     });
 
     const data = await response.json();
-    const text = data.content?.[0]?.text || '';
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('JSON non trovato');
-    const result = JSON.parse(jsonMatch[0]);
+    // Vercel restituisce direttamente il JSON, Netlify lo wrappa in content[0].text
+    let result;
+    if (data.platform || data.error) {
+      result = data;
+    } else {
+      const text = data.content?.[0]?.text || '';
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('JSON non trovato');
+      result = JSON.parse(jsonMatch[0]);
+    }
     if (result.error) throw new Error(result.error);
 
     currentResult = result;
@@ -835,10 +841,15 @@ Genera il testo in ITALIANO e in INGLESE. Rispondi SOLO con un oggetto JSON vali
       body: JSON.stringify({ prompt })
     });
     const data = await response.json();
-    const text = data.content?.[0]?.text || '';
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('JSON non trovato');
-    annuncioData = JSON.parse(jsonMatch[0]);
+    // Vercel restituisce direttamente il JSON parsato
+    if (data.it && data.en) {
+      annuncioData = data;
+    } else {
+      const text = data.content?.[0]?.text || '';
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('JSON non trovato');
+      annuncioData = JSON.parse(jsonMatch[0]);
+    }
 
     document.getElementById('annuncio-loading').style.display = 'none';
     document.getElementById('annuncio-result').style.display = 'block';
