@@ -141,6 +141,47 @@ html, body {
 .bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.5s ease; }
 .bar-label { font-size: 9px; color: var(--muted); }
 
+/* PRIVACY BANNER */
+#privacy-banner {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 9999;
+  background: var(--text);
+  color: #fff;
+  padding: 1rem 1.25rem 1.5rem;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
+  display: none;
+}
+#privacy-banner p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+#privacy-banner a { color: #1D9E75; text-decoration: underline; }
+.privacy-banner-btns { display: flex; gap: 8px; }
+.btn-accept-privacy {
+  flex: 1;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-decline-privacy {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
 /* SETTINGS */
 .plan-box { margin: 0 1.25rem; background: var(--card); border-radius: 14px; padding: 1rem 1.25rem; border: 0.5px solid var(--border); }
 .plan-name { font-size: 15px; font-weight: 500; }
@@ -563,7 +604,24 @@ html, body {
           <i class="ti ti-star"></i> Attiva Premium — €3,99/mese
         </button>
         <div class="modal-price-note">Disdici in qualsiasi momento · Nessun vincolo</div>
+        <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">
+          Proseguendo accetti la nostra <a href="/privacy-policy.html" target="_blank" style="color:var(--accent);text-decoration:underline">Privacy Policy</a>. Pagamento gestito in modo sicuro da Stripe.
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- PRIVACY BANNER -->
+  <div id="privacy-banner">
+    <p>
+      Salestrack salva i tuoi dati di vendita <strong>solo sul tuo dispositivo</strong> (localStorage).
+      Quando carichi uno screenshot, viene inviato ad Anthropic AI per l'analisi e subito eliminato.
+      Per il piano Premium, i dati di pagamento sono gestiti da Stripe.
+      Leggi la nostra <a href="/privacy-policy.html" target="_blank">Privacy Policy</a> per saperne di più.
+    </p>
+    <div class="privacy-banner-btns">
+      <button class="btn-accept-privacy" onclick="acceptPrivacy()">Ho capito, continua</button>
+      <button class="btn-decline-privacy" onclick="acceptPrivacy()">Chiudi</button>
     </div>
   </div>
 
@@ -1055,8 +1113,19 @@ function renderSettings() {
   }
 }
 
+// ─── PRIVACY BANNER ────────────────────────────────────────
+function acceptPrivacy() {
+  localStorage.setItem('privacy_accepted', '1');
+  document.getElementById('privacy-banner').style.display = 'none';
+}
+
 // ─── INIT ──────────────────────────────────────────────────
 renderHome();
+
+// Mostra banner privacy se non ancora accettato
+if (!localStorage.getItem('privacy_accepted')) {
+  document.getElementById('privacy-banner').style.display = 'block';
+}
 
 // Mostra banner installazione se non già installata e non già chiusa
 if (!window.matchMedia('(display-mode: standalone)').matches && !localStorage.getItem('installDismissed')) {
